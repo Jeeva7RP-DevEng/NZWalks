@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
 
 namespace NZWalks.API.Controllers
@@ -11,27 +12,53 @@ namespace NZWalks.API.Controllers
     {
         // GET ALL REGIONS
         // GET : https://localhost:portnumber/api/Regions
+
+        private readonly NZWalksDbContext dbContext;
+
+        public RegionsController(NZWalksDbContext nZWalksDbContext)
+        {
+            this.dbContext = nZWalksDbContext;
+        }
+
         [HttpGet]
+
+        /// <summary>
+        /// GetAll method returns all
+        /// </summary>
         public IActionResult GetAll()
         {
-            var region = new List<Region>
-            {
-                new Region
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Auckland",
-                    Code = "AKL",
-                    RegionImageUrl = "https://media.istockphoto.com/id/504712721/photo/auckland-dawn.jpg?s=1024x1024&w=is&k=20&c=MaJbOeSQv2qTAmRNBlCw3IynvEBVoCqAwMklhKmXw9U="
-                },
-                new Region
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Wellington Region",
-                    Code = "WLG",
-                    RegionImageUrl = "https://images.pexels.com/photos/17025916/pexels-photo-17025916/free-photo-of-early-morning-sunrise-in-the-city-center-of-zierikzee-zeeland-the-netherlands.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                }
-            };
+            var region = dbContext.Regions.ToList();
             return Ok(region);
         }
+
+        // GET REGION BY ID
+
+        [HttpGet]
+        [Route("{id:guid}")]
+
+        /// <summary>
+        /// GetRegionById method returns a region by its id
+        /// </summary>
+
+        public IActionResult GetRegionById(Guid id)
+        {
+            try
+            {
+                //var region = dbContext.Regions.Find(id);
+                var region = dbContext.Regions.FirstOrDefault(r => r.Id == id);
+                if (region !=  null)
+                {
+                    return Ok(region);
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
+            }
+
+            return NotFound();
+        }
+
+        
     }
 }
