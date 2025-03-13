@@ -44,22 +44,6 @@ namespace NZWalks.API.Controllers
             {
                 //GET regions using  Domain model
                 var regionDomains = await regionRepository.GetAllAsync();
-                ////GET regions using  DTOs Method
-                //var regionDto = new List<RegionDto>();
-                //foreach (var regiondomain in regionDomains)
-                //{
-                //    regionDto.Add(new RegionDto()
-                //    {
-                //        Id = regiondomain.Id,
-                //        Code = regiondomain.Code,
-                //        RegionImageUrl = regiondomain.RegionImageUrl
-                //    });
-                //}
-
-                //Map domain models to DTOs
-                //var regionDto  = mapper.Map<List<RegionDto>>(regionDomains);
-
-                //return Ok(regionDto);
 
                 return Ok(mapper.Map<List<RegionDto>>(regionDomains));
             }
@@ -82,37 +66,23 @@ namespace NZWalks.API.Controllers
         {
             try
             {
-                //var region = dbContext.Regions.Find(id);
                 //Get regionbyid uisng Domain model
                 var region = await regionRepository.GetById(id);
-                //Get region by id uisng DTOs
-                //if (region != null)
-                //{
-                //    var regionDto = new RegionDto
-                //    {
-                //        Id = region.Id,
-                //        Code = region.Code,
-                //        RegionImageUrl = region.RegionImageUrl,
-                //        Name = region.Name
-                //    };
 
-                //var regionDto = mapper.Map<List<RegionDto>>(region)
-
-                //return Ok(regionDto);
-                //}
-
-                if (region != null)
+                if (region == null)
                 {
-                    var regionDto = (mapper.Map<RegionDto>(region));
-                    return Ok(regionDto);
+                    return NotFound($"Given region id : {id} NOT found");
                 }
+
+                //Mapping DTOs to Model using Auto map
+                var regionDto = (mapper.Map<RegionDto>(region));
+                return Ok(regionDto);
 
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
-            return Ok();
         }
 
         //POST Method for Regions 
@@ -141,18 +111,7 @@ namespace NZWalks.API.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError, "Error creating the region");
                 }
 
-                ////Converting Model to DTO
-                //var regionDto = new RegionDto
-                //{
-                //    Id = regionDomainModel.Id,
-                //    Code = regionDomainModel.Code,
-                //    Name = regionDomainModel.Name,
-                //    RegionImageUrl = regionDomainModel.RegionImageUrl
-                //};
-
-                //return the newly created region because it is a post method
-                //return CreatedAtAction(nameof(GetRegionById), new { id = regionDto.Id }, regionDto);
-
+                //Mapping DTOs to Model using Auto map
                 return Ok(mapper.Map<RegionDto>(regionDomainModel));
 
             }
@@ -186,17 +145,7 @@ namespace NZWalks.API.Controllers
                     return NotFound($"Region with Id: {id} not found");
                 }
 
-                // Convert DomainModel Values into Dto format
-                //var regionDto = new RegionDto
-                //{
-                //    Id = regionDomainModel.Id,
-                //    Code = regionDomainModel.Code,
-                //    Name = regionDomainModel.Name,
-                //    RegionImageUrl = regionDomainModel.RegionImageUrl,
-                //};
-
-                //return Ok(regionDto);
-
+                //Mapping DTOs to Model using Auto map
                 return Ok(mapper.Map<RegionDto>(regionDomainModel));
             }
             catch (Exception ex)
@@ -222,20 +171,7 @@ namespace NZWalks.API.Controllers
             {
                 return NotFound($"No Id : {id} Found");
             }
-
-            //return delete Region back optional.
-            //Map Domain Model to DTO
-
-            //var regionDto = new RegionDto
-            //{
-            //    Id = regionDomainModel.Id,
-            //    Code = regionDomainModel.Code,
-            //    Name = regionDomainModel.Name,
-            //    RegionImageUrl = regionDomainModel.RegionImageUrl,
-            //};
-
-            //return Ok(regionDto);
-
+            //Mapping DTOs to Model using Auto map
             return Ok(mapper.Map<RegionDto>(regionDomainModel));
         }
 
