@@ -16,7 +16,7 @@ We recommend always using the latest stable version to benefit from security pat
 If you discover a security vulnerability in NZWalks API, please report it responsibly by following these steps:
 
 1. **Do not disclose the issue publicly** until we have assessed and resolved it.
-2. **Email the maintainers** at [jeevaklm007@gmail.com] (replace with actual email) with a detailed report.
+2. **Email the maintainers** at [jeevaklm007@gmail.com]  with a detailed report.
 3. Include the following in your report:
    - Description of the vulnerability
    - Steps to reproduce the issue
