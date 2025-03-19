@@ -4,16 +4,16 @@
 
 This project is an **ASP.NET Core Web API** built using **.NET 8**, **Entity Framework Core (EF Core)**, and **SQL Server**. It follows best practices, including clean architecture principles, dependency injection, and authentication using JWT.
 
-## 📌 About the Course
-With over **11,000 student enrollments** and **2,000+ 5-star reviews**, this course has helped developers of all levels master **ASP.NET Core Web API**.
+## 📌 About the Project
+Developers of all levels master **ASP.NET Core Web API**.
 
-This course is designed for:
+This Project is designed for:
 - **Beginners & Intermediate Developers** who have prior knowledge of **C#** and **ASP.NET MVC** and want to deepen their skills.
 - Developers looking to understand **REST API development** with ASP.NET Core and .NET 8.
 
 ## 🚀 What You Will Learn
 
-In this **ASP.NET Core Web API** course, you will build a real-world project—creating an API to manage **regions and walks in New Zealand**. Clients can consume this API to fetch and manage data efficiently.
+In this **ASP.NET Core Web API** Project, you will build a real-world project—creating an API to manage **regions and walks in New Zealand**. Clients can consume this API to fetch and manage data efficiently.
 
 ### 📌 Key Learning Areas
 - **Understanding REST Principles** and how to build a Web API using **ASP.NET Core**
