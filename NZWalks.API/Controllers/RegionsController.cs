@@ -40,7 +40,8 @@ namespace NZWalks.API.Controllers
         /// <param name="filterOn">The field to filter on (optional).</param>
         /// <param name="filterQuery">The filter query value (optional).</param>
         /// <returns>An IActionResult containing the list of regions or an error message.</returns>
-        [HttpGet]
+        [HttpGet]
+
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
             try
