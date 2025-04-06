@@ -30,12 +30,33 @@ namespace NZWalks.API.Repositoties
         }
 
         /// <summary>
-        /// Get All Walks as Async
+        /// Retrieves all Walks asynchronously with optional filtering.
         /// </summary>
-        /// <returns></returns>
-        public async Task<List<Walk>> GetAllAsync()
+        /// <param name="filterOn">The field to filter on (e.g., "name" or "code").</param>
+        /// <param name="filterQuery">The query to filter by.</param>
+        /// <returns>A list of Walk objects.</returns>
+        public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
         {
-            return await dbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();    
+            var walks = dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
+
+            // Filtering
+            if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
+            {
+                switch (filterOn.ToLower())
+                {
+                    case "name":
+                        walks = walks.Where(r => r.Name.Contains(filterQuery));
+                        break;
+
+                    case "code":
+                        walks = walks.Where(r => r.Description.Contains(filterQuery));
+                        break;
+
+                        // Add more filters easily here
+                }
+            }
+
+            return await walks.ToListAsync();
         }
 
         /// <summary>

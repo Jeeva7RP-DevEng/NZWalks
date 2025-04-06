@@ -34,18 +34,19 @@ namespace NZWalks.API.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet]
-
         /// <summary>
-        /// GetAll method returns all
+        /// Retrieves all regions with optional filtering.
         /// </summary>
-        public async Task<IActionResult> GetAll()
+        /// <param name="filterOn">The field to filter on (optional).</param>
+        /// <param name="filterQuery">The filter query value (optional).</param>
+        /// <returns>An IActionResult containing the list of regions or an error message.</returns>
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
-
             try
             {
-                //GET regions using  Domain model
-                var regionDomains = await regionRepository.GetAllAsync();
+                //GET regions using Domain model
+                var regionDomains = await regionRepository.GetAllAsync(filterOn, filterQuery);
 
                 return Ok(mapper.Map<List<RegionDto>>(regionDomains));
             }
@@ -53,9 +54,6 @@ namespace NZWalks.API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
-
-
-
         }
 
         // GET REGION BY ID
