@@ -122,8 +122,12 @@ namespace NZWalks.API.Controllers
         }
 
 
-        //PUT Method for Update a Region
-
+        /// <summary>
+        /// Updates a region by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the region to update.</param>
+        /// <param name="regionRequest">The updated region data.</param>
+        /// <returns>An IActionResult indicating the result of the operation.</returns>
         [HttpPut]
         [Route("{id:guid}")]
         public async Task<IActionResult> UpdateRegionById([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto regionRequest)

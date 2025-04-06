@@ -4,7 +4,13 @@
 /// </summary>
 public class BaseModel
 {
+    /// <summary>
+    /// Gets or sets the unique identifier for the model.
+    /// </summary>
     public Guid Id { get; set; }
 
-    public string Name {  get; set; }
+    /// <summary>
+    /// Gets or sets the name of the model.
+    /// </summary>
+    public string Name { get; set; }
 }

@@ -28,17 +28,17 @@ namespace NZWalks.API.Data
                 new Difficulty
                 {
                     Id = Guid.Parse("a054baf8-4de8-4a8c-b6eb-e9b4fe0d661e"),
-                    Name = "Auckland"
+                    Name = "EASY"
                 },
                 new Difficulty
                 {
                     Id = Guid.Parse("ada6443c-2f08-4489-adb6-76557c061c3e"),
-                    Name = "Wellington"
+                    Name = "MEDIUM"
                 },
                 new Difficulty
                 {
                     Id = Guid.Parse("b187c163-b4a2-42ed-b9ae-9fa226cfb0b6"),
-                    Name = "Taranaki"
+                    Name = "HARD"
                 }
             };
 
