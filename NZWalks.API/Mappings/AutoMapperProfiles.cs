@@ -4,8 +4,15 @@ using NZWalks.API.Models.Domain;
 
 namespace NZWalks.API.Mappings
 {
+    /// <summary>
+    /// AutoMapper profile configuration for mapping between domain and DTO objects.
+    /// </summary>
     public class AutoMapperProfiles : Profile
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutoMapperProfiles"/> class.
+        /// Configures the mappings between domain and DTO objects.
+        /// </summary>
         public AutoMapperProfiles()
         {
             CreateMap<Region, RegionDto>().ReverseMap();
@@ -13,6 +20,8 @@ namespace NZWalks.API.Mappings
             CreateMap<UpdateRegionRequestDto, RegionDto>().ReverseMap();
             CreateMap<AddWalkRequestDto, Walk>().ReverseMap();
             CreateMap<Walk, WalkDto>().ReverseMap();
+            CreateMap<Difficulty, DifficultyDto>().ReverseMap();
+            CreateMap<UpdateWalkRequestDto, Walk>().ReverseMap();
         }
     }
 
