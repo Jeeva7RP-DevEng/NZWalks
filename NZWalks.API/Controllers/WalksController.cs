@@ -5,6 +5,7 @@ using Microsoft.SqlServer.Server;
 using NZWalks.API.Models.DTO;
 using AutoMapper;
 using NZWalks.API.Repositoties;
+using NZWalks.API.CustomActionFilters;
 
 namespace NZWalks.API.Controllers
 {
@@ -32,15 +33,16 @@ namespace NZWalks.API.Controllers
         /// <param name="addWalkRequestDto">The walk details to add.</param>
         /// <returns>The created walk details.</returns>
         [HttpPost]
+        [ValidateModelAttribute]
         public async Task<IActionResult> Create([FromBody] AddWalkRequestDto addWalkRequestDto)
         {
-            // Map DTO model to Domain
             var walkDomainModel = mapper.Map<Walk>(addWalkRequestDto);
 
             await walkRepository.CreateAsync(walkDomainModel);
 
             // Map Domain model to DTO
             return Ok(mapper.Map<WalkDto>(walkDomainModel));
+
         }
 
         /// <summary>
@@ -48,6 +50,7 @@ namespace NZWalks.API.Controllers
         /// </summary>
         /// <returns>A list of all walks.</returns>
         [HttpGet]
+        [ValidateModelAttribute]
         public async Task<IActionResult> GetAllAsync()
         {
             try
@@ -87,9 +90,9 @@ namespace NZWalks.API.Controllers
         /// <returns>The updated walk details.</returns>
         [HttpPut]
         [Route("{id:Guid}")]
+        [ValidateModelAttribute]
         public async Task<IActionResult> UpdateWalk([FromRoute] Guid id, [FromBody] UpdateWalkRequestDto updateWalkRequestDto)
-        {
-            // Map DTO to Domain
+        { // Map DTO to Domain
             var updatedWalksModel = mapper.Map<Walk>(updateWalkRequestDto);
             updatedWalksModel = await walkRepository.UpdateWalkAsync(id, updatedWalksModel);
             if (updatedWalksModel == null)
@@ -117,6 +120,7 @@ namespace NZWalks.API.Controllers
 
             //Map Model to DTO
             return Ok(mapper.Map<WalkDto>(deletedWalkDomainModel));
+
         }
     }
 }

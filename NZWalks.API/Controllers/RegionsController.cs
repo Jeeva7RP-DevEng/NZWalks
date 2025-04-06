@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NZWalks.API.CustomActionFilters;
 using NZWalks.API.Data;
 using NZWalks.API.Mappings;
 using NZWalks.API.Models.Domain;
@@ -40,6 +41,7 @@ namespace NZWalks.API.Controllers
         /// </summary>
         public async Task<IActionResult> GetAll()
         {
+
             try
             {
                 //GET regions using  Domain model
@@ -51,12 +53,16 @@ namespace NZWalks.API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
+
+
+
         }
 
         // GET REGION BY ID
 
         [HttpGet]
         [Route("{id:guid}")]
+        [ValidateModelAttribute]
 
         /// <summary>
         /// GetRegionById method returns a region by its id
@@ -83,10 +89,13 @@ namespace NZWalks.API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
+
+
         }
 
         //POST Method for Regions 
         [HttpPost]
+        [ValidateModelAttribute]
         /// <summary>
         /// Create method Create Regions and  returns regions
         /// </summary>
@@ -119,6 +128,7 @@ namespace NZWalks.API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
+
         }
 
 
@@ -130,6 +140,7 @@ namespace NZWalks.API.Controllers
         /// <returns>An IActionResult indicating the result of the operation.</returns>
         [HttpPut]
         [Route("{id:guid}")]
+        [ValidateModelAttribute]
         public async Task<IActionResult> UpdateRegionById([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto regionRequest)
         {
             try
@@ -163,6 +174,7 @@ namespace NZWalks.API.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [ValidateModelAttribute]
 
         /// <summary>
         /// DeleteById  Method for Update a Region
@@ -177,6 +189,7 @@ namespace NZWalks.API.Controllers
             }
             //Mapping DTOs to Model using Auto map
             return Ok(mapper.Map<RegionDto>(regionDomainModel));
+
         }
 
     }
