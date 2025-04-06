@@ -1,0 +1,13 @@
+# Auto normalize text files
+* text=auto
+
+# C# source files use CRLF
+*.cs text eol=crlf
+
+# JSON, XML, config files use CRLF
+*.json text eol=crlf
+*.xml text eol=crlf
+*.config text eol=crlf
+
+# Shell scripts (if any) use LF
+*.sh text eol=lf
