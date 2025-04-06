@@ -13,7 +13,7 @@ namespace NZWalks.API.Repositoties
         /// Retrieves all regions asynchronously.
         /// </summary>
         /// <returns>A list of regions.</returns>
-        Task<List<Region>> GetAllAsync();
+        Task<List<Region>> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery);
 
         /// <summary>
         /// Retrieves a region by its unique identifier asynchronously.
