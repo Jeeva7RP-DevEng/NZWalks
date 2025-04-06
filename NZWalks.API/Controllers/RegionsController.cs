@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NZWalks.API.CustomActionFilters;
 using NZWalks.API.Data;
 using NZWalks.API.Mappings;
 using NZWalks.API.Models.Domain;
@@ -40,31 +41,28 @@ namespace NZWalks.API.Controllers
         /// </summary>
         public async Task<IActionResult> GetAll()
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    //GET regions using  Domain model
-                    var regionDomains = await regionRepository.GetAllAsync();
 
-                    return Ok(mapper.Map<List<RegionDto>>(regionDomains));
-                }
-                catch (Exception)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
-                }
-            }
-            else
+            try
             {
-                return BadRequest(ModelState);
+                //GET regions using  Domain model
+                var regionDomains = await regionRepository.GetAllAsync();
+
+                return Ok(mapper.Map<List<RegionDto>>(regionDomains));
             }
-            
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
+            }
+
+
+
         }
 
         // GET REGION BY ID
 
         [HttpGet]
         [Route("{id:guid}")]
+        [ValidateModelAttribute]
 
         /// <summary>
         /// GetRegionById method returns a region by its id
@@ -72,77 +70,65 @@ namespace NZWalks.API.Controllers
 
         public async Task<IActionResult> GetRegionById([FromRoute] Guid id)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                //Get regionbyid uisng Domain model
+                var region = await regionRepository.GetById(id);
+
+                if (region == null)
                 {
-                    //Get regionbyid uisng Domain model
-                    var region = await regionRepository.GetById(id);
-
-                    if (region == null)
-                    {
-                        return NotFound($"Given region id : {id} NOT found");
-                    }
-
-                    //Mapping DTOs to Model using Auto map
-                    var regionDto = (mapper.Map<RegionDto>(region));
-                    return Ok(regionDto);
-
+                    return NotFound($"Given region id : {id} NOT found");
                 }
-                catch (Exception)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
-                }
+
+                //Mapping DTOs to Model using Auto map
+                var regionDto = (mapper.Map<RegionDto>(region));
+                return Ok(regionDto);
+
             }
-            else
+            catch (Exception)
             {
-                return BadRequest(ModelState);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
-            
+
+
         }
 
         //POST Method for Regions 
         [HttpPost]
+        [ValidateModelAttribute]
         /// <summary>
         /// Create method Create Regions and  returns regions
         /// </summary>
 
         public async Task<IActionResult> Create([FromBody] AddRegionRequestDto addRegion)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                //Map the DTO to Domain model
+                var regionDomainModel = new Region
                 {
-                    //Map the DTO to Domain model
-                    var regionDomainModel = new Region
-                    {
-                        Code = addRegion.Code,
-                        RegionImageUrl = addRegion.RegionImageUrl,
-                        Name = addRegion.Name
-                    };
+                    Code = addRegion.Code,
+                    RegionImageUrl = addRegion.RegionImageUrl,
+                    Name = addRegion.Name
+                };
 
-                    //Use Domain Model to create the region into the database
-                    regionDomainModel = await regionRepository.CreateAsync(regionDomainModel);
+                //Use Domain Model to create the region into the database
+                regionDomainModel = await regionRepository.CreateAsync(regionDomainModel);
 
-                    if (regionDomainModel == null)
-                    {
-                        return StatusCode(StatusCodes.Status500InternalServerError, "Error creating the region");
-                    }
-
-                    //Mapping DTOs to Model using Auto map
-                    return Ok(mapper.Map<RegionDto>(regionDomainModel));
-
-                }
-                catch (Exception)
+                if (regionDomainModel == null)
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error creating the region");
                 }
 
+                //Mapping DTOs to Model using Auto map
+                return Ok(mapper.Map<RegionDto>(regionDomainModel));
+
             }
-            else
+            catch (Exception)
             {
-                return BadRequest(ModelState);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
+
         }
 
 
@@ -154,47 +140,41 @@ namespace NZWalks.API.Controllers
         /// <returns>An IActionResult indicating the result of the operation.</returns>
         [HttpPut]
         [Route("{id:guid}")]
+        [ValidateModelAttribute]
         public async Task<IActionResult> UpdateRegionById([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto regionRequest)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                //update region Dto to Domain Model
+                var regionDomainModel = new Region
                 {
-                    //update region Dto to Domain Model
-                    var regionDomainModel = new Region
-                    {
-                        Code = regionRequest.Code,
-                        Name = regionRequest.Name,
-                        RegionImageUrl = regionRequest.RegionImageUrl
-                    };
+                    Code = regionRequest.Code,
+                    Name = regionRequest.Name,
+                    RegionImageUrl = regionRequest.RegionImageUrl
+                };
 
-                    regionDomainModel = await regionRepository.UpdateRegionByIdAsync(id, regionDomainModel);
+                regionDomainModel = await regionRepository.UpdateRegionByIdAsync(id, regionDomainModel);
 
-                    if (regionDomainModel == null)
-                    {
-                        return NotFound($"Region with Id: {id} not found");
-                    }
-
-                    //Mapping DTOs to Model using Auto map
-                    return Ok(mapper.Map<RegionDto>(regionDomainModel));
-                }
-                catch (Exception ex)
+                if (regionDomainModel == null)
                 {
-                    log.Add(new Log { Message = ex.Message, LogType = "Error" });
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
+                    return NotFound($"Region with Id: {id} not found");
                 }
+
+                //Mapping DTOs to Model using Auto map
+                return Ok(mapper.Map<RegionDto>(regionDomainModel));
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(ModelState);
+                log.Add(new Log { Message = ex.Message, LogType = "Error" });
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
-                
         }
 
         //Delete Method for UpdDeleteate a Region
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [ValidateModelAttribute]
 
         /// <summary>
         /// DeleteById  Method for Update a Region
@@ -202,21 +182,14 @@ namespace NZWalks.API.Controllers
 
         public async Task<IActionResult> DeleteById([FromRoute] Guid id)
         {
-            if (ModelState.IsValid)
+            var regionDomainModel = await regionRepository.DeleteRegionAsyn(id);
+            if (regionDomainModel == null)
             {
-                var regionDomainModel = await regionRepository.DeleteRegionAsyn(id);
-                if (regionDomainModel == null)
-                {
-                    return NotFound($"No Id : {id} Found");
-                }
-                //Mapping DTOs to Model using Auto map
-                return Ok(mapper.Map<RegionDto>(regionDomainModel));
+                return NotFound($"No Id : {id} Found");
             }
-            else
-            {
-                return BadRequest(ModelState);
-            }
-           
+            //Mapping DTOs to Model using Auto map
+            return Ok(mapper.Map<RegionDto>(regionDomainModel));
+
         }
 
     }
