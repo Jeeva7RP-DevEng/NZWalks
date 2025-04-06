@@ -1,4 +1,5 @@
 ﻿using NZWalks.API.Models.Domain;
+using System.ComponentModel.DataAnnotations;
 
 namespace NZWalks.API.Models.DTO
 {
@@ -15,11 +16,16 @@ namespace NZWalks.API.Models.DTO
         /// <summary>
         /// Gets or sets the name of the walk.
         /// </summary>
+        [Required]
+        [MinLength(3, ErrorMessage = "Name has to be Minimum of 3 character")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description of the walk.
         /// </summary>
+        [Required]
+        [MinLength(3, ErrorMessage = "Name has to be Minimum of 3 character")]
+        [MaxLength(1000, ErrorMessage = "Description Should be within of 1000 character")]
         public string Description { get; set; }
 
         /// <summary>
