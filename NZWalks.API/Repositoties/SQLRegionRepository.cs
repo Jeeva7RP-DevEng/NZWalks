@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
@@ -17,14 +18,37 @@ namespace NZWalks.API.Repositoties
             this.dbContext = dbContext;
         }
 
+
         /// <summary>
-        /// Get All regions Asynchronously  
+        /// Retrieves all regions asynchronously with optional filtering.
         /// </summary>
-        /// <returns>regions</returns>
-        public async Task<List<Region>> GetAllAsync()
+        /// <param name="filterOn">The field to filter on (e.g., "Name").</param>
+        /// <param name="filterQuery">The query to filter the field by.</param>
+        /// <returns>A list of regions, optionally filtered by the specified criteria.</returns>
+        public async Task<List<Region>> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
-            return await dbContext.Regions.ToListAsync();
+            var regions = dbContext.Regions.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
+            {
+                switch (filterOn.ToLower())
+                {
+                    case "name":
+                        regions = regions.Where(r => r.Name.Contains(filterQuery));
+                        break;
+
+                    case "code":
+                        regions = regions.Where(r => r.Code.Contains(filterQuery));
+                        break;
+
+                        // Add more filters easily here
+                }
+            }
+
+            return await regions.ToListAsync();
         }
+
+
         /// <summary>
         /// Get region By Id Asynchronously  
         /// </summary>

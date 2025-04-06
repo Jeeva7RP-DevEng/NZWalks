@@ -46,16 +46,20 @@ namespace NZWalks.API.Controllers
         }
 
         /// <summary>
-        /// Gets all walks.
+        /// Retrieves all walks with optional filtering.
         /// </summary>
-        /// <returns>A list of all walks.</returns>
+        /// <param name="filterOn">The field to filter on (e.g., Name).</param>
+        /// <param name="filterQuery">The query value to filter by.</param>
+        /// <returns>A list of walks that match the filter criteria.</returns>
         [HttpGet]
         [ValidateModelAttribute]
-        public async Task<IActionResult> GetAllAsync()
+        //GET : api/walks/ Example -https://localhost:0000/api/Walks?filterOn=name&filterQuery=Kepler
+
+        public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
             try
             {
-                var walkDomainModels = await walkRepository.GetAllAsync();
+                var walkDomainModels = await walkRepository.GetAllAsync(filterOn, filterQuery);
                 return Ok(mapper.Map<List<WalkDto>>(walkDomainModels));
             }
             catch (Exception)

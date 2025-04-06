@@ -1,4 +1,5 @@
-﻿using NZWalks.API.Models.Domain;
+﻿using Microsoft.AspNetCore.Mvc;
+using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO;
 
 namespace NZWalks.API.Repositoties
@@ -19,7 +20,7 @@ namespace NZWalks.API.Repositoties
         /// Retrieves all Walks asynchronously.
         /// </summary>
         /// <returns>A list of Walk objects.</returns>
-        Task<List<Walk>> GetAllAsync();
+        Task<List<Walk>> GetAllAsync(string? filterOn,  string? filterQuery);
 
         /// <summary>
         /// Retrieves a Walk by its ID asynchronously.
