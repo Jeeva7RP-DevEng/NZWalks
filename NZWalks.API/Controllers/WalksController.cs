@@ -45,21 +45,25 @@ namespace NZWalks.API.Controllers
 
         }
 
+
         /// <summary>
-        /// Retrieves all walks with optional filtering.
+        /// Retrieves all walks with optional filtering and sorting.
         /// </summary>
-        /// <param name="filterOn">The field to filter on (e.g., Name).</param>
-        /// <param name="filterQuery">The query value to filter by.</param>
-        /// <returns>A list of walks that match the filter criteria.</returns>
+        /// <param name="filterOn">The field to filter on (e.g., name).</param>
+        /// <param name="filterQuery">The query to filter the walks.</param>
+        /// <param name="sortBy">The field to sort by.</param>
+        /// <param name="isAscending">Indicates whether the sorting is ascending.</param>
+        /// <returns>A list of walks that match the filter and sort criteria.</returns>
+        /// <response code="200">Returns the list of walks.</response>
+        /// <response code="500">If there is an error retrieving data from the database.</response>
         [HttpGet]
         [ValidateModelAttribute]
-        //GET : api/walks/ Example -https://localhost:0000/api/Walks?filterOn=name&filterQuery=Kepler
-
-        public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
+        //GET : api/walks/ Example sort -https://localhost:7020/api/Walks?sortBy=namE&isAscending=true filter -https://localhost:0000/api/Walks?filterOn=name&filterQuery=Kepler
+        public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, string? sortBy, bool isAscending)
         {
             try
             {
-                var walkDomainModels = await walkRepository.GetAllAsync(filterOn, filterQuery);
+                var walkDomainModels = await walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending);
                 return Ok(mapper.Map<List<WalkDto>>(walkDomainModels));
             }
             catch (Exception)

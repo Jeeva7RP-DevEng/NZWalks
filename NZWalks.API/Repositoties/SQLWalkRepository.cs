@@ -29,13 +29,16 @@ namespace NZWalks.API.Repositoties
             return walk;
         }
 
-        /// <summary>
-        /// Retrieves all Walks asynchronously with optional filtering.
+
+        ///</summary>
+        /// Retrieves all Walks asynchronously with optional filtering and sorting.
         /// </summary>
-        /// <param name="filterOn">The field to filter on (e.g., "name" or "code").</param>
-        /// <param name="filterQuery">The query to filter by.</param>
-        /// <returns>A list of Walk objects.</returns>
-        public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
+        /// <param name="filterOn">The field to filter on (e.g., "name", "code").</param>
+        /// <param name="filterQuery">The query string to filter the results.</param>
+        /// <param name="sortBy">The field to sort by (e.g., "name", "lengthinkm").</param>
+        /// <param name="isAscending">Specifies whether the sorting should be in ascending order.</param>
+        /// <returns>A list of Walk objects that match the filtering and sorting criteria.</returns>
+        public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = false)
         {
             var walks = dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
 
@@ -53,6 +56,21 @@ namespace NZWalks.API.Repositoties
                         break;
 
                         // Add more filters easily here
+                }
+            }
+
+            //sorting
+            if (string.IsNullOrWhiteSpace(sortBy) == false)
+            {
+                switch (sortBy.ToLower())
+                {
+                    case "name":
+                        walks = isAscending ? walks.OrderBy(x => x.Name) : walks.OrderByDescending(x => x.Name);
+                        break;
+                    case "lengthinkm":
+                        walks = isAscending ? walks.OrderBy(x => x.LengthInkm) : walks.OrderByDescending(x => x.LengthInkm);
+                        break;
+
                 }
             }
 
