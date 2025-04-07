@@ -10,10 +10,14 @@ namespace NZWalks.API.Repositoties
     public interface IRegionRepository
     {
         /// <summary>
-        /// Retrieves all regions asynchronously.
+        /// Retrieves all regions asynchronously with optional filtering and sorting.
         /// </summary>
-        /// <returns>A list of regions.</returns>
-        Task<List<Region>> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery);
+        /// <param name="filterOn">The field to filter on.</param>
+        /// <param name="filterQuery">The query to filter the field with.</param>
+        /// <param name="sortBy">The field to sort by.</param>
+        /// <param name="isAscending">Indicates whether the sorting should be in ascending order.</param>
+        /// <returns>A list of regions that match the filter and sorting criteria.</returns>
+        Task<List<Region>> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, string? sortBy, bool isAscending);
 
         /// <summary>
         /// Retrieves a region by its unique identifier asynchronously.

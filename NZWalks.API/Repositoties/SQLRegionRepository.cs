@@ -20,14 +20,17 @@ namespace NZWalks.API.Repositoties
 
 
         /// <summary>
-        /// Retrieves all regions asynchronously with optional filtering.
+        /// Retrieves all regions asynchronously with optional filtering and sorting.
         /// </summary>
-        /// <param name="filterOn">The field to filter on (e.g., "Name").</param>
-        /// <param name="filterQuery">The query to filter the field by.</param>
-        /// <returns>A list of regions, optionally filtered by the specified criteria.</returns>
-        public async Task<List<Region>> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
+        /// <param name="filterOn">The field to filter on.</param>
+        /// <param name="filterQuery">The query to filter the field with.</param>
+        /// <param name="sortBy">The field to sort by.</param>
+        /// <param name="isAscending">Indicates whether the sorting should be in ascending order.</param>
+        /// <returns>A list of regions that match the filter and sorting criteria.</returns>
+        public async Task<List<Region>> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, string? sortBy, bool isAscending = false)
         {
             var regions = dbContext.Regions.AsQueryable();
+            //filtering
 
             if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
             {
@@ -42,6 +45,21 @@ namespace NZWalks.API.Repositoties
                         break;
 
                         // Add more filters easily here
+                }
+            }
+
+            //sorting
+            if (string.IsNullOrWhiteSpace(sortBy) == false)
+            {
+                switch (sortBy.ToLower())
+                {
+                    case "name":
+                        regions = isAscending ? regions.OrderBy(x => x.Name) : regions.OrderByDescending(x => x.Name);
+                        break;
+                    case "code":
+                        regions = isAscending ? regions.OrderBy(x => x.Code) : regions.OrderByDescending(x => x.Code);
+                        break;
+
                 }
             }
 

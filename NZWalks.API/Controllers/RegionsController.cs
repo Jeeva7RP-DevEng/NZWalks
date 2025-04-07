@@ -34,20 +34,22 @@ namespace NZWalks.API.Controllers
             this.mapper = mapper;
         }
 
-        /// <summary>
-        /// Retrieves all regions with optional filtering.
+      
+        ///<summary>
+        /// Retrieves all regions with optional filtering and sorting.
         /// </summary>
-        /// <param name="filterOn">The field to filter on (optional).</param>
-        /// <param name="filterQuery">The filter query value (optional).</param>
-        /// <returns>An IActionResult containing the list of regions or an error message.</returns>
-        [HttpGet]
-
-        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
+        /// <param name="filterOn">The field to filter on.</param>
+        /// <param name="filterQuery">The query to filter by.</param>
+        /// <param name="sortBy">The field to sort by.</param>
+        /// <param name="isAscending">Indicates if the sorting should be in ascending order.</param>
+        /// <returns>An IActionResult containing the list of regions.</returns>
+        [HttpGet]        //GET : -https://localhost:7020/api/Regions?filterOn=name&filterQuery=land&sortBy=name&isAscending=true
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, string? sortBy, bool isAscending)
         {
             try
             {
                 //GET regions using Domain model
-                var regionDomains = await regionRepository.GetAllAsync(filterOn, filterQuery);
+                var regionDomains = await regionRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending);
 
                 return Ok(mapper.Map<List<RegionDto>>(regionDomains));
             }

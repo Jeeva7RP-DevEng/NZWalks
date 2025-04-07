@@ -16,11 +16,16 @@ namespace NZWalks.API.Repositoties
         /// <returns>The created Walk object.</returns>
         Task<Walk> CreateAsync(Walk walk);
 
+
         /// <summary>
-        /// Retrieves all Walks asynchronously.
+        /// Retrieves all Walks asynchronously with optional filtering and sorting.
         /// </summary>
-        /// <returns>A list of Walk objects.</returns>
-        Task<List<Walk>> GetAllAsync(string? filterOn,  string? filterQuery);
+        /// <param name="filterOn">The field to filter on (e.g., "Name", "Region").</param>
+        /// <param name="filterQuery">The query to filter the results by.</param>
+        /// <param name="sortBy">The field to sort by (e.g., "Name", "LengthInkm").</param>
+        /// <param name="isAscending">Indicates whether the sorting should be in ascending order.</param>
+        /// <returns>A list of Walk objects that match the filter and sort criteria.</returns>
+        Task<List<Walk>> GetAllAsync(string? filterOn, string? filterQuery, string? sortBy, bool isAscending);
 
         /// <summary>
         /// Retrieves a Walk by its ID asynchronously.
