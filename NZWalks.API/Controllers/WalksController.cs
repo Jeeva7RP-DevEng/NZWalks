@@ -59,11 +59,12 @@ namespace NZWalks.API.Controllers
         [HttpGet]
         [ValidateModelAttribute]
         //GET : api/walks/ Example sort -https://localhost:7020/api/Walks?sortBy=namE&isAscending=true filter -https://localhost:0000/api/Walks?filterOn=name&filterQuery=Kepler
-        public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, string? sortBy, bool isAscending)
+        public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn,
+            [FromQuery] string? filterQuery, string? sortBy, bool isAscending, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
         {
             try
             {
-                var walkDomainModels = await walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending);
+                var walkDomainModels = await walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
                 return Ok(mapper.Map<List<WalkDto>>(walkDomainModels));
             }
             catch (Exception)

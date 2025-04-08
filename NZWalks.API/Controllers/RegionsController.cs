@@ -43,13 +43,15 @@ namespace NZWalks.API.Controllers
         /// <param name="sortBy">The field to sort by.</param>
         /// <param name="isAscending">Indicates if the sorting should be in ascending order.</param>
         /// <returns>An IActionResult containing the list of regions.</returns>
-        [HttpGet]        //GET : -https://localhost:7020/api/Regions?filterOn=name&filterQuery=land&sortBy=name&isAscending=true
-        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, string? sortBy, bool isAscending)
+        [HttpGet]
+        //GET : -https://localhost:7020/api/Regions?filterOn=name&filterQuery=land&sortBy=name&isAscending=true
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
+            string? sortBy, bool isAscending, [FromQuery] int? pageNumber, [FromQuery] int? pageSize)
         {
             try
             {
                 //GET regions using Domain model
-                var regionDomains = await regionRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending);
+                var regionDomains = await regionRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
 
                 return Ok(mapper.Map<List<RegionDto>>(regionDomains));
             }
@@ -183,7 +185,7 @@ namespace NZWalks.API.Controllers
 
         public async Task<IActionResult> DeleteById([FromRoute] Guid id)
         {
-            var regionDomainModel = await regionRepository.DeleteRegionAsyn(id);
+            var regionDomainModel = await regionRepository.DeleteRegionAsync(id);
             if (regionDomainModel == null)
             {
                 return NotFound($"No Id : {id} Found");

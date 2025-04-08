@@ -27,10 +27,11 @@ namespace NZWalks.API.Repositoties
         /// <param name="sortBy">The field to sort by.</param>
         /// <param name="isAscending">Indicates whether the sorting should be in ascending order.</param>
         /// <returns>A list of regions that match the filter and sorting criteria.</returns>
-        public async Task<List<Region>> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, string? sortBy, bool isAscending = false)
+        public async Task<List<Region>> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, 
+            string? sortBy, bool isAscending = false, [FromQuery] int? pageNumber = 0, [FromQuery] int? pageSize = 0)
         {
             var regions = dbContext.Regions.AsQueryable();
-            //filtering
+            //Filtering
 
             if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
             {
@@ -48,7 +49,7 @@ namespace NZWalks.API.Repositoties
                 }
             }
 
-            //sorting
+            //Sorting
             if (string.IsNullOrWhiteSpace(sortBy) == false)
             {
                 switch (sortBy.ToLower())
@@ -61,6 +62,13 @@ namespace NZWalks.API.Repositoties
                         break;
 
                 }
+            }
+
+            // Pagination
+            if (pageNumber.HasValue && pageSize.HasValue && pageNumber > 0 && pageSize > 0)
+            {
+                var skipResult = (pageNumber.Value - 1) * pageSize.Value;
+                regions = regions.Skip(skipResult).Take(pageSize.Value);
             }
 
             return await regions.ToListAsync();
@@ -121,7 +129,7 @@ namespace NZWalks.API.Repositoties
         /// </summary>
         /// <param name="Id"></param>
         /// <returns>Deleted regions</returns>
-        public async Task<Region?> DeleteRegionAsyn(Guid Id)
+        public async Task<Region?> DeleteRegionAsync(Guid Id)
         {
             var regionDeleted = await dbContext.Regions.FirstOrDefaultAsync(r => r.Id == Id);
             if (regionDeleted == null)

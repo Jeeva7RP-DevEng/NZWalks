@@ -38,7 +38,8 @@ namespace NZWalks.API.Repositoties
         /// <param name="sortBy">The field to sort by (e.g., "name", "lengthinkm").</param>
         /// <param name="isAscending">Specifies whether the sorting should be in ascending order.</param>
         /// <returns>A list of Walk objects that match the filtering and sorting criteria.</returns>
-        public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = false)
+        public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = false
+     , [FromQuery] int? pageNumber = 0, [FromQuery] int? pageSize = 0)
         {
             var walks = dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
 
@@ -59,7 +60,7 @@ namespace NZWalks.API.Repositoties
                 }
             }
 
-            //sorting
+            // Sorting
             if (string.IsNullOrWhiteSpace(sortBy) == false)
             {
                 switch (sortBy.ToLower())
@@ -70,8 +71,14 @@ namespace NZWalks.API.Repositoties
                     case "lengthinkm":
                         walks = isAscending ? walks.OrderBy(x => x.LengthInkm) : walks.OrderByDescending(x => x.LengthInkm);
                         break;
-
                 }
+            }
+
+            // Pagination
+            if (pageNumber.HasValue && pageSize.HasValue && pageNumber > 0 && pageSize > 0)
+            {
+                var skipResult = (pageNumber.Value - 1) * pageSize.Value;
+                walks = walks.Skip(skipResult).Take(pageSize.Value);
             }
 
             return await walks.ToListAsync();

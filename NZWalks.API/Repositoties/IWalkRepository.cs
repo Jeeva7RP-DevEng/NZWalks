@@ -25,7 +25,8 @@ namespace NZWalks.API.Repositoties
         /// <param name="sortBy">The field to sort by (e.g., "Name", "LengthInkm").</param>
         /// <param name="isAscending">Indicates whether the sorting should be in ascending order.</param>
         /// <returns>A list of Walk objects that match the filter and sort criteria.</returns>
-        Task<List<Walk>> GetAllAsync(string? filterOn, string? filterQuery, string? sortBy, bool isAscending);
+        Task<List<Walk>> GetAllAsync(string? filterOn, string? filterQuery, string? sortBy, bool isAscending
+            , [FromQuery] int? pageNumber, [FromQuery] int? pageSize);
 
         /// <summary>
         /// Retrieves a Walk by its ID asynchronously.
