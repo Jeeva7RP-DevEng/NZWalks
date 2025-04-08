@@ -17,7 +17,8 @@ namespace NZWalks.API.Repositoties
         /// <param name="sortBy">The field to sort by.</param>
         /// <param name="isAscending">Indicates whether the sorting should be in ascending order.</param>
         /// <returns>A list of regions that match the filter and sorting criteria.</returns>
-        Task<List<Region>> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, string? sortBy, bool isAscending);
+        Task<List<Region>> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, string? sortBy,
+            bool isAscending, [FromQuery] int? pageNumber, [FromQuery] int? pageSize);
 
         /// <summary>
         /// Retrieves a region by its unique identifier asynchronously.
@@ -46,6 +47,6 @@ namespace NZWalks.API.Repositoties
         /// </summary>
         /// <param name="Id">The unique identifier of the region to delete.</param>
         /// <returns>The deleted region if successful; otherwise, null.</returns>
-        Task<Region?> DeleteRegionAsyn(Guid Id);
+        Task<Region?> DeleteRegionAsync(Guid Id);
     }
 }
